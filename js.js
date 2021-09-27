@@ -19,8 +19,23 @@ function addBookToLibrary() {
     bookPages = parseInt(document.getElementById('pages').value);
     
     bookNew = new Book(bookTitle, bookAuthor, bookPages);
+    
 
     myLibrary.push(bookNew);
+
+    // Add new book to Library
+    let newBook = document.createElement('div');
+    let cardTitle = document.createElement('p');
+    cardTitle.innerHTML += bookNew.title;
+    let cardAuthor = document.createElement('p');
+    cardAuthor.innerHTML += bookNew.author;
+    let cardPages = document.createElement('p');
+    cardPages.innerHTML += bookNew.pages;
+    newBook.className = 'bookCard';
+    newBook.append(cardTitle, cardAuthor, cardPages); 
+    container.appendChild(newBook);
+
+    
     
     console.log(myLibrary);
 }
@@ -41,9 +56,10 @@ function displayBooks() {
         newBook.className = 'bookCard';
         newBook.append(cardTitle, cardAuthor, cardPages); 
         container.appendChild(newBook);
-
     })
 }
+
+
 
 
 // Add books to Library
@@ -57,3 +73,4 @@ function presetBooks() {
     console.log(myLibrary);
 }
 window.onload = presetBooks();
+window.onload = displayBooks();
