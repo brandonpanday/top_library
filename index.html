@@ -8,18 +8,28 @@
     <title>Document</title>
 </head>
 <body>
-        <label for="title">Title</label>
-        <input type="text" id="title">
-        <label for="author">Author</label>
-        <input type="text" id="author">
-        <label for="pages">Pages</label>
-        <input type="number" id="pages">
+    <header>
+        <h1>My Library</h1>
+        <button onclick="toggleAdd()" id="btnForm">Add</button>
+    </header>
+    <section id="bookForm">
+        <h2>Add new book</h2>
+        <input type="text" id="title" placeholder="Title" class="inputField">
+        <br />
+        <input type="text" id="author" placeholder="Author" class="inputField">
+        <br />
+        <input type="number" id="pages" placeholder="# of pages" class="inputField">
+        <br />
+        <input type="radio" id="readTrue" value="true" name="read">
+        <label for="readTrue">Read</label>
+        <input type="radio" id="readFalse" value="false" name="read" >
+        <label for="readFalse">Not Read</label>
+        <br />
+        <button class="addBtn" onclick="addBook()">Add</button>
+    </section>
 
-        <button onclick="addBookToLibrary()">Add</button>
-        <button onclick="displayBooks()">Display Books</button>
-        <button onclick="newBook()">Add Book</button>
-        <div id="container">
-        </div>
+    <div id="container">
+    </div>
     <script src="js.js"></script>
 </body>
 </html>

@@ -1,29 +1,45 @@
-// Initialize variables
+// initialize variables
 let myLibrary = [];
 let bookTitle;
 let bookAuthor;
 let bookPages;
-let bookOne;
+let bookRead;
+let count = 0;
 
-// Book constructors
-function Book(title, author, pages) {
+
+// Book constructor
+function Book(title, author, pages, read, id) {
     this.title = title;
     this.author = author;
     this.pages = pages;
+    if (read == 'true')
+        this.read = true;
+    if (read == 'false')
+        this.read = false;
+    this.id = count;
+    
 }
 
-// Get input and add book to library
-function addBookToLibrary() {
+
+// Fn get input and add book to library
+function createBookObj() {
     bookTitle = document.getElementById('title').value;
     bookAuthor = document.getElementById('author').value;
     bookPages = parseInt(document.getElementById('pages').value);
-    
-    bookNew = new Book(bookTitle, bookAuthor, bookPages);
-    
+    bookRead = document.querySelector('input[name="read"]:checked').value;
 
+    // create new Book object
+    bookNew = new Book(bookTitle, bookAuthor, bookPages, bookRead);
+    
+    // push object to Library array
     myLibrary.push(bookNew);
+    
+    // print library
+    console.log(myLibrary);
+}
 
-    // Add new book to Library
+// add Book div to DOM
+function addBooktoDom() {
     let newBook = document.createElement('div');
     let cardTitle = document.createElement('p');
     cardTitle.innerHTML += bookNew.title;
@@ -31,17 +47,23 @@ function addBookToLibrary() {
     cardAuthor.innerHTML += bookNew.author;
     let cardPages = document.createElement('p');
     cardPages.innerHTML += bookNew.pages;
-    newBook.className = 'bookCard';
-    newBook.append(cardTitle, cardAuthor, cardPages); 
-    container.appendChild(newBook);
+    let cardDel = document.createElement('button');
+    cardDel.className = 'deleteBtn';
+    cardDel.innerHTML = 'Delete';
+    cardDel.addEventListener("click", deleteCard);
 
-    
-    
-    console.log(myLibrary);
+    // assign style to card
+    newBook.className = 'bookCard';
+    newBook.id = count;
+
+    // append card to container
+    newBook.append(cardTitle, cardAuthor, cardPages, cardDel); 
+    container.appendChild(newBook);
+    count ++;
 }
 
-// Loop through array and add books
-function displayBooks() {
+// loop through array and add books
+function getBooks() {
     let container = document.getElementById('container');   
 
     myLibrary.forEach(element => {
@@ -53,24 +75,45 @@ function displayBooks() {
         cardAuthor.innerHTML += element.author;
         let cardPages = document.createElement('p');
         cardPages.innerHTML += element.pages;
+
+        let cardDel = document.createElement('button');
+        cardDel.className = 'deleteBtn';
+        cardDel.innerHTML = 'Delete';
+        cardDel.addEventListener("click", deleteCard);
+
         newBook.className = 'bookCard';
-        newBook.append(cardTitle, cardAuthor, cardPages); 
+        newBook.append(cardTitle, cardAuthor, cardPages, cardDel); 
         container.appendChild(newBook);
     })
 }
 
+window.onload = getBooks();
 
-
-
-// Add books to Library
-function presetBooks() {
-    bookOne = new Book("Book One", "Author 1", 101);
-    bookTwo = new Book("Book Two", "Author 2", 102);
-    bookThree = new Book("Book Three", "Author 3", 103);
-    myLibrary.push(bookOne);
-    myLibrary.push(bookTwo);
-    myLibrary.push(bookThree);
-    console.log(myLibrary);
+function addBook() {
+    createBookObj();
+    addBooktoDom();
 }
-window.onload = presetBooks();
-window.onload = displayBooks();
+
+function toggleAdd() {
+    let bookForm = document.getElementById('bookForm');
+    let container = document.getElementById('container');
+
+    if (bookForm.style.display == 'block') {
+        bookForm.style.display = 'none';
+        container.style.opacity = '1';
+    }
+    else {
+        bookForm.style.display = 'block';
+        container.style.opacity = '0.5';
+    }
+}
+
+// delete from DOM
+function deleteCard(e) {
+    let btn = e.target.parentNode;
+    console.log(btn);
+    myLibrary.splice(btn.id, 1);
+    btn.remove();
+    
+ }
+ 
