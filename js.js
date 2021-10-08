@@ -1,10 +1,5 @@
 // initialize variables
 let myLibrary = [];
-let bookTitle;
-let bookAuthor;
-let bookPages;
-let bookRead;
-let count = 0;
 
 
 // Book constructor
@@ -16,37 +11,49 @@ function Book(title, author, pages, read, id) {
         this.read = true;
     if (read == 'false')
         this.read = false;
-    this.id = count;
+    this.id = id;
     
 }
 
+
+
+function checkArray(str) {
+    let x = 0;
+    myLibrary.forEach(obj => {
+        if (str == obj.id) {
+            console.log("EXISTS");
+            x = 1;
+        }
+    })
+
+    return x;
+}
 
 // Fn get input and add book to library
 function createBookObj() {
-    bookTitle = document.getElementById('title').value;
-    bookAuthor = document.getElementById('author').value;
-    bookPages = parseInt(document.getElementById('pages').value);
-    bookRead = document.querySelector('input[name="read"]:checked').value;
+    let bookTitle = document.getElementById('title').value;
+    let bookAuthor = document.getElementById('author').value;
+    let bookPages = parseInt(document.getElementById('pages').value);
+    let bookRead = document.querySelector('input[name="read"]:checked').value;
+    let bookData = `${bookTitle}-${bookAuthor}-${bookPages}`;
 
-    // create new Book object
-    bookNew = new Book(bookTitle, bookAuthor, bookPages, bookRead);
-    
-    // push object to Library array
-    myLibrary.push(bookNew);
-    
-    // print library
-    console.log(myLibrary);
+    let yesNo = checkArray(bookData);
+    if (yesNo == 0) {
+        bookNew = new Book(bookTitle, bookAuthor, bookPages, bookRead, bookData);
+        addBooktoDom(bookNew);
+        myLibrary.push(bookNew);
+    } else alert("Book already exists");
 }
 
 // add Book div to DOM
-function addBooktoDom() {
+function addBooktoDom(obj) {
     let newBook = document.createElement('div');
     let cardTitle = document.createElement('p');
-    cardTitle.innerHTML += bookNew.title;
+    cardTitle.innerHTML += obj.title;
     let cardAuthor = document.createElement('p');
-    cardAuthor.innerHTML += bookNew.author;
+    cardAuthor.innerHTML += obj.author;
     let cardPages = document.createElement('p');
-    cardPages.innerHTML += bookNew.pages;
+    cardPages.innerHTML += obj.pages;
     let cardDel = document.createElement('button');
     cardDel.className = 'deleteBtn';
     cardDel.innerHTML = 'Delete';
@@ -54,12 +61,11 @@ function addBooktoDom() {
 
     // assign style to card
     newBook.className = 'bookCard';
-    newBook.id = count;
+    newBook.id = obj.id;
 
     // append card to container
     newBook.append(cardTitle, cardAuthor, cardPages, cardDel); 
     container.appendChild(newBook);
-    count ++;
 }
 
 // loop through array and add books
@@ -89,10 +95,6 @@ function getBooks() {
 
 window.onload = getBooks();
 
-function addBook() {
-    createBookObj();
-    addBooktoDom();
-}
 
 function toggleAdd() {
     let bookForm = document.getElementById('bookForm');
@@ -110,9 +112,9 @@ function toggleAdd() {
 
 // delete from DOM
 function deleteCard(e) {
-    let btn = e.target.parentNode;
+    let btn = e.target.parentNode.id;
     console.log(btn);
-    myLibrary.splice(btn.id, 1);
+    myLibrary.splice(btn, 1);
     btn.remove();
     
  }
