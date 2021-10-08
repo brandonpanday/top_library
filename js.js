@@ -15,17 +15,14 @@ function Book(title, author, pages, read, id) {
     
 }
 
-
-
-function checkArray(str) {
+function loopStorage(item) {
     let x = 0;
-    myLibrary.forEach(obj => {
-        if (str == obj.id) {
-            console.log("EXISTS");
-            x = 1;
-        }
+    Object.keys(localStorage).forEach(key => {
+        console.log(localStorage.getItem(key));
+        let bk = JSON.parse(localStorage.getItem(key));
+        if (item == bk.id)
+        x = 1;
     })
-
     return x;
 }
 
@@ -35,14 +32,18 @@ function createBookObj() {
     let bookAuthor = document.getElementById('author').value;
     let bookPages = parseInt(document.getElementById('pages').value);
     let bookRead = document.querySelector('input[name="read"]:checked').value;
-    let bookData = `${bookTitle}-${bookAuthor}-${bookPages}`;
+    let bookId = `${bookTitle}-${bookAuthor}-${bookPages}`;
 
-    let yesNo = checkArray(bookData);
-    if (yesNo == 0) {
-        bookNew = new Book(bookTitle, bookAuthor, bookPages, bookRead, bookData);
+    let x = loopStorage(bookId);
+
+    if (x == 0) {
+        bookNew = new Book(bookTitle, bookAuthor, bookPages, bookRead, bookId);
+        localStorage.setItem(bookId, JSON.stringify(bookNew));
         addBooktoDom(bookNew);
-        myLibrary.push(bookNew);
-    } else alert("Book already exists");
+    }
+    else {
+        alert("Book already exists");
+    }
 }
 
 // add Book div to DOM
@@ -68,54 +69,67 @@ function addBooktoDom(obj) {
     container.appendChild(newBook);
 }
 
+window.onload = storageAvailable();
+window.onload = getBooks();
+
 // loop through array and add books
 function getBooks() {
     let container = document.getElementById('container');   
-
-    myLibrary.forEach(element => {
-        console.log(`Title: ${element.title} Author: ${element.author} Pages: ${element.pages} added.`);
-        let newBook = document.createElement('div');
-        let cardTitle = document.createElement('p');
-        cardTitle.innerHTML += element.title;
-        let cardAuthor = document.createElement('p');
-        cardAuthor.innerHTML += element.author;
-        let cardPages = document.createElement('p');
-        cardPages.innerHTML += element.pages;
-
-        let cardDel = document.createElement('button');
-        cardDel.className = 'deleteBtn';
-        cardDel.innerHTML = 'Delete';
-        cardDel.addEventListener("click", deleteCard);
-
-        newBook.className = 'bookCard';
-        newBook.append(cardTitle, cardAuthor, cardPages, cardDel); 
-        container.appendChild(newBook);
+    Object.keys(localStorage).forEach(key => {
+        console.log(localStorage.getItem(key));
+        let bk = JSON.parse(localStorage.getItem(key));
+        addBooktoDom(bk);
     })
 }
-
-window.onload = getBooks();
-
 
 function toggleAdd() {
     let bookForm = document.getElementById('bookForm');
     let container = document.getElementById('container');
-
-    if (bookForm.style.display == 'block') {
-        bookForm.style.display = 'none';
-        container.style.opacity = '1';
-    }
-    else {
-        bookForm.style.display = 'block';
-        container.style.opacity = '0.5';
-    }
+    bookForm.style.display = 'block';
+    container.style.opacity = '0.5';
 }
+
+document.getElementById('formClose').addEventListener("click", function() {
+    let bookForm = document.getElementById('bookForm');
+    let container = document.getElementById('container');
+    bookForm.style.display = 'none';
+    container.style.opacity = '1';
+})
 
 // delete from DOM
 function deleteCard(e) {
-    let btn = e.target.parentNode.id;
+    let btn = e.target.parentNode;
     console.log(btn);
-    myLibrary.splice(btn, 1);
+
+    Object.keys(localStorage).forEach(key => {
+        console.log(localStorage.getItem(key));
+        let bk = JSON.parse(localStorage.getItem(key));
+        if (btn.id == bk.id)
+            localStorage.removeItem(bk.id);
+    })
+
     btn.remove();
     
  }
+
+  // Local Storage Check
+  function storageAvailable(type) {
+    let storage;
+    try {
+        storage = window[type];
+        let x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        console.log("LocalStorage enabled.");
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            e.code === 22 ||
+            e.code === 1014 ||
+            e.name === 'QuotaExceededError' ||
+            e.name === 'NS_ERROR_DOM_QUOTE_REACHED') &&
+            (storage && storage.length !== 0);
+    }
+}
  

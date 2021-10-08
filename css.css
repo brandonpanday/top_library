@@ -50,7 +50,7 @@ header h2:hover {
     border: 5px solid #C9C9C9;
     border-radius: 5px;    
     text-align: center;
-    padding: 2em 0;
+    padding: 0 0;
     z-index: 99999;
     position: absolute;
     left: 0;
@@ -58,13 +58,13 @@ header h2:hover {
     margin: 2em auto;
     display: none;    
 }
-section h2 {
+.formTitle {
     text-transform: capitalize;
     font-family: sans-serif;
     font-size: 32px;
     color: black;
-    width: 350px;
     margin: 0.5em auto;
+    display: inline-block;
 
 }
 .inputField {
@@ -109,4 +109,13 @@ label, input[type=radio] {
 }
 #btnForm:hover {
     background-color: #D9D9D9;
+}
+#formClose {
+    float: right;
+    font-family: sans-serif;
+    font-size: 2em;
+    margin: 0 0 1em 0;
+    padding: .5em .5em 0 0;
+    display: inline-block;
+    cursor: pointer;    
 }
