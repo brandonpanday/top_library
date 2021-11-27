@@ -3,15 +3,30 @@ let myLibrary = [];
 
 
 // Book constructor
-function Book(title, author, pages, read, id) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    if (read == 'true')
-        this.read = true;
-    if (read == 'false')
-        this.read = false;
-    this.id = id;
+// function Book(title, author, pages, read, id) {
+//     this.title = title;
+//     this.author = author;
+//     this.pages = pages;
+//     if (read == 'true')
+//         this.read = true;
+//     if (read == 'false')
+//         this.read = false;
+//     this.id = id;
+    
+// }
+
+class Book {
+    constructor(title, author, pages, read, id) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        if (read == 'true')
+            this.read = true;
+        if (read == 'false')
+            this.read = false;
+        this.id = id;
+    }
+
     
 }
 
@@ -63,6 +78,9 @@ function addBooktoDom(obj) {
     // assign style to card
     newBook.className = 'bookCard';
     newBook.id = obj.id;
+    cardTitle.className = 'cardTitle';
+    cardAuthor.className = 'cardAuthor';
+    cardPages.className = 'cardPages';
 
     // append card to container
     newBook.append(cardTitle, cardAuthor, cardPages, cardDel); 
